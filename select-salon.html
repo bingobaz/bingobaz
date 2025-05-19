@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>انتخاب سالن و کارت - BingoBaz</title>
+  <style>
+    body {
+      background: radial-gradient(circle, #1a1a1a, #2e003e);
+      color: #00ff99;
+      font-family: Tahoma, sans-serif;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .salon-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .salon-item {
+      background-color: #3c007a;
+      border: 2px solid #00ff99;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .salon-item.active {
+      background-color: #00ff99;
+      color: #2e003e;
+    }
+
+    .card-options {
+      margin-bottom: 30px;
+    }
+
+    .card-button {
+      background-color: #3c007a;
+      border: 2px solid #00ff99;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 16px;
+      margin: 0 8px;
+      cursor: pointer;
+    }
+
+    .card-button.active {
+      background-color: #00ff99;
+      color: #2e003e;
+    }
+
+    .start-button {
+      background-color: #00ff99;
+      color: #2e003e;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>انتخاب سالن و کارت</h1>
+
+  <div class="salon-list" id="salonList">
+    <!-- لیست سالن‌ها دینامیک با جاوااسکریپت -->
+  </div>
+
+  <div class="card-options">
+    <span>تعداد کارت:</span>
+    <button class="card-button" onclick="selectCardCount(1)">۱ کارت</button>
+    <button class="card-button" onclick="selectCardCount(2)">۲ کارت</button>
+    <button class="card-button" onclick="selectCardCount(3)">۳ کارت</button>
+  </div>
+
+  <button class="start-button" onclick="startGame()">ورود به بازی</button>
+
+  <script>
+    const salonList = document.getElementById('salonList');
+    const salonTimes = ['۱۰:۱۰', '۱۰:۲۰', '۱۰:۳۰', '۱۰:۴۰', '۱۰:۵۰', '۱۱:۰۰'];
+    let selectedSalon = null;
+    let selectedCardCount = 1;
+
+    salonTimes.forEach(time => {
+      const btn = document.createElement('div');
+      btn.className = 'salon-item';
+      btn.innerText = time;
+      btn.onclick = () => {
+        document.querySelectorAll('.salon-item').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        selectedSalon = time;
+      };
+      salonList.appendChild(btn);
+    });
+
+    function selectCardCount(count) {
+      document.querySelectorAll('.card-button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      selectedCardCount = count;
+    }
+
+    function startGame() {
+      if (!selectedSalon) {
+        alert('لطفاً یک سالن انتخاب کنید.');
+        return;
+      }
+      location.href = game.html?salon=${selectedSalon}&cards=${selectedCardCount};
+    }
+  </script>
+
+</body>
+</html>
