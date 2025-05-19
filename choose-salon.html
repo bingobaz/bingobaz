@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>انتخاب سالن - BingoBaz</title>
+  <style>
+    body {
+      background: radial-gradient(circle, #1a1a1a, #2e003e);
+      color: #00ff99;
+      font-family: Tahoma, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    .saloon-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .saloon {
+      background-color: #3c007a;
+      border: 2px solid #00ff99;
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .saloon:hover {
+      background-color: #00ff99;
+      color: #2e003e;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 30px;
+      color: #00ff99;
+      font-weight: bold;
+      text-decoration: underline;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>انتخاب سالن (بر اساس قیمت کارت)</h1>
+
+  <div class="saloon-list">
+    <div class="saloon" onclick="selectSaloon(10000)">سالن ۱۰هزارتومانی</div>
+    <div class="saloon" onclick="selectSaloon(25000)">سالن ۲۵هزارتومانی</div>
+    <div class="saloon" onclick="selectSaloon(50000)">سالن ۵۰هزارتومانی</div>
+    <div class="saloon" onclick="selectSaloon(200000)">سالن ۲۰۰هزارتومانی</div>
+    <div class="saloon" onclick="selectSaloon(500000)">سالن ۵۰۰هزارتومانی</div>
+    <div class="saloon" onclick="selectSaloon(1000000)">سالن ۱میلیونی</div>
+    <div class="saloon" onclick="selectSaloon(2500000)">سالن ۲.۵میلیونی</div>
+    <div class="saloon" onclick="selectSaloon(5000000)">سالن ۵میلیونی</div>
+  </div>
+
+  <a class="back-link" href="index.html">منوی اصلی</a>
+
+  <script>
+    function selectSaloon(price) {
+      window.location.href = choose-room.html?price=${price};
+    }
+  </script>
+
+</body>
+</html>
