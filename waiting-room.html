@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BingoBaz - در حال انتظار</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اتاق انتظار - BingoBaz</title>
   <style>
     body {
       background: radial-gradient(circle, #1a1a1a, #2e003e);
@@ -12,24 +12,29 @@
       text-align: center;
       padding: 40px 20px;
     }
+
     h1 {
       font-size: 26px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
+
     .info-box {
       background-color: #3c007a;
       border: 2px solid #00ff99;
       border-radius: 12px;
       padding: 20px;
-      margin: 15px 0;
+      margin: 15px auto;
+      max-width: 400px;
       font-size: 18px;
     }
+
     .timer {
       font-size: 36px;
       margin: 20px 0;
       font-weight: bold;
       color: #ffcc00;
     }
+
     .leave-button {
       background-color: #ff0033;
       color: white;
@@ -40,60 +45,74 @@
       margin-top: 30px;
       cursor: pointer;
     }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 30px;
+      color: #00ff99;
+      font-weight: bold;
+      text-decoration: underline;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
 
-  <h1 id="salonName">سالن ۱۰:۲۰</h1>
+  <h1 id="gameInfo">در حال آماده‌سازی بازی...</h1>
 
-  <div class="timer" id="countdown">02:00 تا شروع بازی</div>
+  <div class="timer" id="countdown">02:00</div>
 
-  <div class="info-box" id="players">تعداد بازیکنان: ۵</div>
-  <div class="info-box" id="cards">تعداد کل کارت‌ها: ۱۳</div>
-  <div class="info-box" id="prize">مبلغ جایزه (بعد از ۱۰٪ کمیسیون): ۱۷۵۰ تتر</div>
+  <div class="info-box" id="playersBox">تعداد بازیکنان: ...</div>
+  <div class="info-box" id="cardsBox">تعداد کل کارت‌ها: ...</div>
+  <div class="info-box" id="prizeBox">مبلغ جایزه: ...</div>
 
   <button class="leave-button" onclick="leaveGame()">ترک بازی</button>
+  <br>
+  <a href="index.html" class="back-link">منوی اصلی</a>
 
   <script>
-    // پارامترها از آدرس URL گرفته میشن
     const urlParams = new URLSearchParams(window.location.search);
-    const salon = urlParams.get('salon') || 'نامشخص';
+    const price = parseInt(urlParams.get('price')) || 10000;
+    const time = urlParams.get('time') || 'نامشخص';
     const userCards = parseInt(urlParams.get('cards')) || 1;
 
-    document.getElementById('salonName').innerText = سالن ${salon};
+    document.getElementById('gameInfo').innerText = سالن ${price.toLocaleString()} تومانی - ساعت ${time};
 
-    // داده شبیه‌سازی‌شده
-    const playerCount = 5;
-    const totalCards = 13;
-    const prizePerCard = 150;
-    const totalPrize = totalCards * prizePerCard;
-    const finalPrize = Math.floor(totalPrize * 0.9); // کسر ۱۰٪ کمیسیون
+    // شبیه‌سازی ثبت‌نام چند کاربر
+    const totalPlayers = Math.floor(Math.random() * 6) + 1; // حداقل 1، حداکثر 6 نفر
+    const totalCards = totalPlayers * (Math.floor(Math.random() * 3) + 1);
+    const prizeTotal = totalCards * price;
+    const prizeAfterCommission = Math.floor(prizeTotal * 0.9);
 
-    document.getElementById('players').innerText = تعداد بازیکنان: ${playerCount};
-    document.getElementById('cards').innerText = تعداد کل کارت‌ها: ${totalCards};
-    document.getElementById('prize').innerText = مبلغ جایزه (بعد از ۱۰٪ کمیسیون): ${finalPrize} تتر;
+    document.getElementById('playersBox').innerText = تعداد بازیکنان: ${totalPlayers};
+    document.getElementById('cardsBox').innerText = تعداد کل کارت‌ها: ${totalCards};
+    document.getElementById('prizeBox').innerText = مبلغ جایزه (بعد از ۱۰٪ کمیسیون): ${prizeAfterCommission.toLocaleString()} تومان;
 
-    // تایمر معکوس
+    // تایمر
     let duration = 120;
     const timerEl = document.getElementById('countdown');
 
     const interval = setInterval(() => {
       const minutes = String(Math.floor(duration / 60)).padStart(2, '0');
       const seconds = String(duration % 60).padStart(2, '0');
-      timerEl.innerText = ${minutes}:${seconds} تا شروع بازی;
+      timerEl.innerText = ${minutes}:${seconds};
       duration--;
 
       if (duration < 0) {
         clearInterval(interval);
-        timerEl.innerText = "بازی در حال شروع است...";
-        setTimeout(() => {
-          window.location.href = game.html?salon=${salon}&cards=${userCards};
-        }, 2000);
+        if (totalPlayers < 2) {
+          timerEl.innerText = "در انتظار بازیکن دیگر...";
+        } else {
+          timerEl.innerText = "بازی در حال شروع است...";
+          setTimeout(() => {
+            window.location.href = game.html?price=${price}&time=${encodeURIComponent(time)}&cards=${userCards};
+          }, 2000);
+        }
       }
     }, 1000);
 
     function leaveGame() {
-      if (confirm("آیا مطمئن هستید که می‌خواهید بازی را ترک کنید؟")) {
+      if (confirm("مطمئنی می‌خوای بازی رو ترک کنی؟")) {
         window.location.href = "index.html";
       }
     }
