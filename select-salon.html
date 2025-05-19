@@ -20,8 +20,8 @@
 
     .salon-list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 14px;
       margin-bottom: 30px;
     }
 
@@ -29,9 +29,10 @@
       background-color: #3c007a;
       border: 2px solid #00ff99;
       border-radius: 10px;
-      padding: 12px;
+      padding: 14px;
       cursor: pointer;
       font-size: 16px;
+      transition: 0.3s;
     }
 
     .salon-item.active {
@@ -68,15 +69,18 @@
       font-weight: bold;
       cursor: pointer;
     }
+
+    .status {
+      font-size: 12px;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
 
   <h1>انتخاب سالن و کارت</h1>
 
-  <div class="salon-list" id="salonList">
-    <!-- لیست سالن‌ها دینامیک با جاوااسکریپت -->
-  </div>
+  <div class="salon-list" id="salonList"></div>
 
   <div class="card-options">
     <span>تعداد کارت:</span>
@@ -90,18 +94,40 @@
   <script>
     const salonList = document.getElementById('salonList');
     const salonTimes = ['۱۰:۱۰', '۱۰:۲۰', '۱۰:۳۰', '۱۰:۴۰', '۱۰:۵۰', '۱۱:۰۰'];
+    const currentTime = '۱۰:۲۵'; // در نسخه واقعی باید از سرور بیاد
     let selectedSalon = null;
     let selectedCardCount = 1;
 
     salonTimes.forEach(time => {
       const btn = document.createElement('div');
       btn.className = 'salon-item';
-      btn.innerText = time;
-      btn.onclick = () => {
-        document.querySelectorAll('.salon-item').forEach(el => el.classList.remove('active'));
-        btn.classList.add('active');
-        selectedSalon = time;
-      };
+
+      let statusText = '';
+      let statusColor = '';
+
+      if (time > currentTime) {
+        statusText = 'در حال انتظار';
+        statusColor = '#00ff99';
+        btn.onclick = () => {
+          document.querySelectorAll('.salon-item').forEach(el => el.classList.remove('active'));
+          btn.classList.add('active');
+          selectedSalon = time;
+        };
+      } else if (time === currentTime) {
+        statusText = 'در حال اجرا';
+        statusColor = '#ffaa00';
+      } else {
+        statusText = 'تمام شده';
+        statusColor = '#999999';
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = 0.5;
+      }
+
+      btn.innerHTML = `
+        <div>${time}</div>
+        <div class="status" style="color: ${statusColor};">${statusText}</div>
+      `;
+
       salonList.appendChild(btn);
     });
 
@@ -116,7 +142,7 @@
         alert('لطفاً یک سالن انتخاب کنید.');
         return;
       }
-      location.href = game.html?salon=${selectedSalon}&cards=${selectedCardCount};
+      location.href = waiting-room.html?salon=${selectedSalon}&cards=${selectedCardCount};
     }
   </script>
 
