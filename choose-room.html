@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>انتخاب زمان بازی - BingoBaz</title>
+  <style>
+    body {
+      background: radial-gradient(circle, #1a1a1a, #2e003e);
+      color: #00ff99;
+      font-family: Tahoma, sans-serif;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    .room-list {
+      max-width: 800px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .room {
+      background-color: #3c007a;
+      border: 2px solid #00ff99;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .room:hover {
+      background-color: #00ff99;
+      color: #2e003e;
+    }
+
+    .room-time {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .room-detail {
+      font-size: 14px;
+      margin: 4px 0;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 30px;
+      color: #00ff99;
+      font-weight: bold;
+      text-decoration: underline;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="saloonTitle">انتخاب زمان بازی</h1>
+
+  <div class="room-list" id="roomList"></div>
+
+  <a href="index.html" class="back-link">منوی اصلی</a>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const price = parseInt(urlParams.get('price')) || 10000;
+
+    const saloonTitle = document.getElementById('saloonTitle');
+    saloonTitle.innerText = سالن ${price.toLocaleString()} تومانی;
+
+    const times = ['۱۰:۱۰', '۱۰:۲۰', '۱۰:۳۰', '۱۰:۴۰', '۱۰:۵۰', '۱۱:۰۰'];
+
+    const roomList = document.getElementById('roomList');
+
+    times.forEach(time => {
+      const totalCapacity = 8;
+      const registeredPlayers = Math.floor(Math.random() * 8); // شبیه‌سازی ثبت‌نام
+      const totalCards = totalCapacity * 3;
+      const registeredCards = registeredPlayers * Math.floor(Math.random() * 3 + 1);
+      const remainingCards = totalCards - registeredCards;
+
+      const div = document.createElement('div');
+      div.className = 'room';
+      div.onclick = () => {
+        window.location.href = select-cards.html?price=${price}&time=${encodeURIComponent(time)};
+      };
+
+      div.innerHTML = `
+        <div class="room-time">ساعت شروع: ${time}</div>
+        <div class="room-detail">ظرفیت بازیکن: ${totalCapacity} نفر</div>
+        <div class="room-detail">ثبت‌نام شده: ${registeredPlayers} نفر</div>
+        <div class="room-detail">کارت باقی‌مانده: ${remainingCards} کارت</div>
+      `;
+
+      roomList.appendChild(div);
+    });
+  </script>
+
+</body>
+</html>
