@@ -3,71 +3,101 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BingoBaz - ورود</title>
+  <title>ورود به BingoBaz</title>
   <style>
     body {
-      margin: 0;
-      font-family: Tahoma, sans-serif;
       background: radial-gradient(circle, #1a1a1a, #2e003e);
-      color: #e0e0e0;
+      color: #00ff99;
+      font-family: Tahoma, sans-serif;
       text-align: center;
       padding: 40px 20px;
     }
-    .box {
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .form-container {
       background-color: #3c007a;
       border: 2px solid #00ff99;
-      border-radius: 16px;
-      padding: 30px;
-      max-width: 320px;
-      margin: 80px auto;
+      border-radius: 12px;
+      max-width: 350px;
+      margin: auto;
+      padding: 30px 20px;
     }
+
     input {
+      display: block;
       width: 100%;
-      padding: 10px;
-      margin-top: 15px;
-      border-radius: 10px;
+      margin: 12px 0;
+      padding: 12px;
       border: none;
+      border-radius: 8px;
       font-size: 16px;
-      text-align: center;
     }
-    button {
-      margin-top: 20px;
-      padding: 12px 24px;
+
+    .btn {
       background-color: #00ff99;
-      color: #1a1a1a;
+      color: #2e003e;
       font-weight: bold;
       border: none;
-      border-radius: 12px;
+      border-radius: 8px;
+      padding: 12px;
       font-size: 18px;
+      margin-top: 10px;
       cursor: pointer;
       width: 100%;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h2>BingoBaz</h2>
-    <input type="text" id="name" placeholder="نام خود را وارد کنید">
-    <input type="tel" id="phone" placeholder="مثلاً 09121234567">
-    <button onclick="login()">ورود</button>
+
+  <h1>ورود به BingoBaz</h1>
+
+  <div class="form-container">
+    <input type="tel" id="mobile" placeholder="شماره موبایل" />
+    <input type="password" id="password" placeholder="رمز عبور" />
+    <button class="btn" onclick="login()">ورود / ثبت‌نام</button>
+    <div class="error" id="errorBox"></div>
   </div>
 
   <script>
-    if (localStorage.getItem("userPhone") && localStorage.getItem("userName")) {
-      location.href = "menu.html";
-    }
-
     function login() {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      if (!name || !phone || phone.length < 10) {
-        alert("لطفاً نام و شماره موبایل معتبر وارد کنید.");
+      const mobile = document.getElementById('mobile').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorBox = document.getElementById('errorBox');
+
+      if (!mobile || !password) {
+        errorBox.innerText = 'شماره موبایل و رمز عبور الزامی است.';
         return;
       }
-      localStorage.setItem("userName", name);
-      localStorage.setItem("userPhone", phone);
-      location.href = "menu.html";
+
+      const users = JSON.parse(localStorage.getItem('bingobaz_users') || '{}');
+
+      if (users[mobile]) {
+        // ورود
+        if (users[mobile] === password) {
+          localStorage.setItem('bingobaz_loggedin', mobile);
+          window.location.href = 'index.html';
+        } else {
+          errorBox.innerText = 'رمز عبور اشتباه است.';
+        }
+      } else {
+        // ثبت‌نام
+        users[mobile] = password;
+        localStorage.setItem('bingobaz_users', JSON.stringify(users));
+        localStorage.setItem('bingobaz_loggedin', mobile);
+        window.location.href = 'index.html';
+      }
     }
   </script>
+
 </body>
 </html>
