@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BingoBaz - در حال انتظار</title>
+  <style>
+    body {
+      background: radial-gradient(circle, #1a1a1a, #2e003e);
+      color: #00ff99;
+      font-family: Tahoma, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+    .info-box {
+      background-color: #3c007a;
+      border: 2px solid #00ff99;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+      font-size: 18px;
+    }
+    .timer {
+      font-size: 36px;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #ffcc00;
+    }
+    .leave-button {
+      background-color: #ff0033;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-top: 30px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="salonName">سالن ۱۰:۲۰</h1>
+
+  <div class="timer" id="countdown">02:00 تا شروع بازی</div>
+
+  <div class="info-box" id="players">تعداد بازیکنان: ۵</div>
+  <div class="info-box" id="cards">تعداد کل کارت‌ها: ۱۳</div>
+  <div class="info-box" id="prize">مبلغ جایزه (بعد از ۱۰٪ کمیسیون): ۱۷۵۰ تتر</div>
+
+  <button class="leave-button" onclick="leaveGame()">ترک بازی</button>
+
+  <script>
+    // پارامترها از آدرس URL گرفته میشن
+    const urlParams = new URLSearchParams(window.location.search);
+    const salon = urlParams.get('salon') || 'نامشخص';
+    const userCards = parseInt(urlParams.get('cards')) || 1;
+
+    document.getElementById('salonName').innerText = سالن ${salon};
+
+    // داده شبیه‌سازی‌شده
+    const playerCount = 5;
+    const totalCards = 13;
+    const prizePerCard = 150;
+    const totalPrize = totalCards * prizePerCard;
+    const finalPrize = Math.floor(totalPrize * 0.9); // کسر ۱۰٪ کمیسیون
+
+    document.getElementById('players').innerText = تعداد بازیکنان: ${playerCount};
+    document.getElementById('cards').innerText = تعداد کل کارت‌ها: ${totalCards};
+    document.getElementById('prize').innerText = مبلغ جایزه (بعد از ۱۰٪ کمیسیون): ${finalPrize} تتر;
+
+    // تایمر معکوس
+    let duration = 120;
+    const timerEl = document.getElementById('countdown');
+
+    const interval = setInterval(() => {
+      const minutes = String(Math.floor(duration / 60)).padStart(2, '0');
+      const seconds = String(duration % 60).padStart(2, '0');
+      timerEl.innerText = ${minutes}:${seconds} تا شروع بازی;
+      duration--;
+
+      if (duration < 0) {
+        clearInterval(interval);
+        timerEl.innerText = "بازی در حال شروع است...";
+        setTimeout(() => {
+          window.location.href = game.html?salon=${salon}&cards=${userCards};
+        }, 2000);
+      }
+    }, 1000);
+
+    function leaveGame() {
+      if (confirm("آیا مطمئن هستید که می‌خواهید بازی را ترک کنید؟")) {
+        window.location.href = "index.html";
+      }
+    }
+  </script>
+
+</body>
+</html>
