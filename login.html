@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BingoBaz - ورود</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Tahoma, sans-serif;
+      background: radial-gradient(circle, #1a1a1a, #2e003e);
+      color: #e0e0e0;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .box {
+      background-color: #3c007a;
+      border: 2px solid #00ff99;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 320px;
+      margin: 80px auto;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      text-align: center;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #00ff99;
+      color: #1a1a1a;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>BingoBaz</h2>
+    <input type="text" id="name" placeholder="نام خود را وارد کنید">
+    <input type="tel" id="phone" placeholder="مثلاً 09121234567">
+    <button onclick="login()">ورود</button>
+  </div>
+
+  <script>
+    if (localStorage.getItem("userPhone") && localStorage.getItem("userName")) {
+      location.href = "menu.html";
+    }
+
+    function login() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      if (!name || !phone || phone.length < 10) {
+        alert("لطفاً نام و شماره موبایل معتبر وارد کنید.");
+        return;
+      }
+      localStorage.setItem("userName", name);
+      localStorage.setItem("userPhone", phone);
+      location.href = "menu.html";
+    }
+  </script>
+</body>
+</html>
